@@ -1,18 +1,17 @@
 import { DarkModeToggle } from "@/components/dark-mode-toggle";
-import { Button } from "@/components/ui/button";
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/")({
-  component: Landing,
+export const Route = createFileRoute("/(auth)/_layout")({
+  component: PublicLayout,
 });
 
-function Landing() {
+function PublicLayout() {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur">
         <div className="container mx-auto flex h-14 items-center gap-x-4 px-4">
           <a className="me-auto text-2xl font-bold sm:text-3xl">Kiosk App</a>
-          <Link to="/login" className="">
+          <Link to="/login" className="[&.active]:hidden">
             Login
           </Link>
 
@@ -20,9 +19,7 @@ function Landing() {
         </div>
       </header>
 
-      <h1 className="container mx-auto my-12 text-center text-4xl font-bold sm:text-5xl">
-        Orders made easy
-      </h1>
+      <Outlet />
     </>
   );
 }
