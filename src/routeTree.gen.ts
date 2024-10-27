@@ -19,6 +19,9 @@ import { Route as authLayoutImport } from './routes/(auth)/_layout'
 
 const authImport = createFileRoute('/(auth)')()
 const authLayoutIndexLazyImport = createFileRoute('/(auth)/_layout/')()
+const authShopMerchantIdLazyImport = createFileRoute(
+  '/(auth)/shop/$merchantId',
+)()
 const authLayoutLoginLazyImport = createFileRoute('/(auth)/_layout/login')()
 
 // Create/Update Routes
@@ -40,6 +43,16 @@ const authLayoutIndexLazyRoute = authLayoutIndexLazyImport
     getParentRoute: () => authLayoutRoute,
   } as any)
   .lazy(() => import('./routes/(auth)/_layout/index.lazy').then((d) => d.Route))
+
+const authShopMerchantIdLazyRoute = authShopMerchantIdLazyImport
+  .update({
+    id: '/shop/$merchantId',
+    path: '/shop/$merchantId',
+    getParentRoute: () => authRoute,
+  } as any)
+  .lazy(() =>
+    import('./routes/(auth)/shop/$merchantId.lazy').then((d) => d.Route),
+  )
 
 const authLayoutLoginLazyRoute = authLayoutLoginLazyImport
   .update({
@@ -74,6 +87,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLayoutLoginLazyImport
       parentRoute: typeof authLayoutImport
     }
+    '/(auth)/shop/$merchantId': {
+      id: '/(auth)/shop/$merchantId'
+      path: '/shop/$merchantId'
+      fullPath: '/shop/$merchantId'
+      preLoaderRoute: typeof authShopMerchantIdLazyImport
+      parentRoute: typeof authImport
+    }
     '/(auth)/_layout/': {
       id: '/(auth)/_layout/'
       path: '/'
@@ -102,10 +122,12 @@ const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
 
 interface authRouteChildren {
   authLayoutRoute: typeof authLayoutRouteWithChildren
+  authShopMerchantIdLazyRoute: typeof authShopMerchantIdLazyRoute
 }
 
 const authRouteChildren: authRouteChildren = {
   authLayoutRoute: authLayoutRouteWithChildren,
+  authShopMerchantIdLazyRoute: authShopMerchantIdLazyRoute,
 }
 
 const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
@@ -113,10 +135,12 @@ const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof authLayoutIndexLazyRoute
   '/login': typeof authLayoutLoginLazyRoute
+  '/shop/$merchantId': typeof authShopMerchantIdLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof authLayoutLoginLazyRoute
+  '/shop/$merchantId': typeof authShopMerchantIdLazyRoute
   '/': typeof authLayoutIndexLazyRoute
 }
 
@@ -125,19 +149,21 @@ export interface FileRoutesById {
   '/(auth)': typeof authRouteWithChildren
   '/(auth)/_layout': typeof authLayoutRouteWithChildren
   '/(auth)/_layout/login': typeof authLayoutLoginLazyRoute
+  '/(auth)/shop/$merchantId': typeof authShopMerchantIdLazyRoute
   '/(auth)/_layout/': typeof authLayoutIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths: '/' | '/login' | '/shop/$merchantId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/'
+  to: '/login' | '/shop/$merchantId' | '/'
   id:
     | '__root__'
     | '/(auth)'
     | '/(auth)/_layout'
     | '/(auth)/_layout/login'
+    | '/(auth)/shop/$merchantId'
     | '/(auth)/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -168,7 +194,8 @@ export const routeTree = rootRoute
     "/(auth)": {
       "filePath": "(auth)",
       "children": [
-        "/(auth)/_layout"
+        "/(auth)/_layout",
+        "/(auth)/shop/$merchantId"
       ]
     },
     "/(auth)/_layout": {
@@ -182,6 +209,10 @@ export const routeTree = rootRoute
     "/(auth)/_layout/login": {
       "filePath": "(auth)/_layout/login.lazy.tsx",
       "parent": "/(auth)/_layout"
+    },
+    "/(auth)/shop/$merchantId": {
+      "filePath": "(auth)/shop/$merchantId.lazy.tsx",
+      "parent": "/(auth)"
     },
     "/(auth)/_layout/": {
       "filePath": "(auth)/_layout/index.lazy.tsx",
