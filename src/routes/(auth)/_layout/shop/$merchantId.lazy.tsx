@@ -28,21 +28,27 @@ function MerchantPage() {
           Something went wrong. Please try again.
         </p>
       ) : (
-        <div className="grid gap-4 sm:grid-flow-col sm:grid-cols-12">
-          <img
-            src={data.merchants[0].logoSrc}
-            alt={data.merchants[0].name}
-            className="max-h-80 justify-self-center rounded-xl sm:col-span-5"
-          />
-          <div className="col-span-7 mt-2">
-            <h2 className="text-3xl font-semibold sm:text-4xl">
-              {data.merchants[0].name}
-            </h2>
-            <p className="text-lg font-medium text-muted-foreground sm:text-xl">
-              {data.merchants[0].category}
-            </p>
+        <>
+          <div className="grid gap-6 sm:grid-flow-col sm:grid-cols-[5fr_7fr]">
+            <img
+              src={data.merchants[0].logoSrc}
+              alt={data.merchants[0].name}
+              className="aspect-[4/3] max-h-80 w-full justify-self-center rounded-xl object-cover"
+            />
+            <div className="">
+              <h2 className="text-3xl font-semibold sm:text-4xl">
+                {data.merchants[0].name}
+              </h2>
+              <p className="text-lg font-medium text-muted-foreground sm:text-xl">
+                {data.merchants[0].category}
+              </p>
+            </div>
           </div>
-        </div>
+          <section>
+            <h3 className="mt-6 text-2xl font-semibold">Items</h3>
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+          </section>
+        </>
       )}
     </div>
   );
