@@ -10,9 +10,9 @@ function PublicLayout() {
     <>
       <header className="sticky top-0 z-50 border-b backdrop-blur">
         <div className="container mx-auto flex min-h-14 items-center gap-x-4 px-4">
-          <a className="me-auto py-2 text-2xl font-bold sm:text-3xl">
+          <Link to="/" className="me-auto py-2 text-2xl font-bold sm:text-3xl">
             Kiosk App
-          </a>
+          </Link>
           <Link to="/login" className="[&.active]:hidden">
             Login
           </Link>
