@@ -1,3 +1,8 @@
-import { init } from "@instantdb/react";
+import { init_experimental } from "@instantdb/react";
 
-export const db = init({ appId: import.meta.env.VITE_INSTANT_APP_ID });
+import schema from "../../instant.schema.ts";
+
+export const db = init_experimental({
+  appId: import.meta.env.VITE_INSTANT_APP_ID,
+  schema,
+});
