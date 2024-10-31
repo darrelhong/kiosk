@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCents } from "@/lib/format-currency";
 import { db } from "@/lib/instant";
+import { id, tx } from "@instantdb/react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { LoaderPinwheel, MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
@@ -13,8 +14,10 @@ export const Route = createLazyFileRoute("/(auth)/_layout/product/$productId")({
 
 function ProductPage() {
   const { productId } = Route.useParams();
+  const navigate = Route.useNavigate();
 
   const [quantity, setQuantity] = useState(1);
+  const [notes, setNotes] = useState("");
 
   const { data, isLoading, error } = db.useQuery({
     products: {
@@ -25,6 +28,21 @@ function ProductPage() {
       },
     },
   });
+
+  const orderNow = () => {
+    const orderId = id();
+    db.transact([
+      tx.orders[orderId]
+        .update({
+          quantity,
+          notes,
+        })
+        .link({
+          product: productId,
+        }),
+    ]);
+    navigate({ to: `/order/${orderId}` });
+  };
 
   if (isLoading) {
     return <LoaderPinwheel className="mx-auto size-5 animate-spin" />;
@@ -61,7 +79,12 @@ function ProductPage() {
 
       <div className="grid w-full gap-1.5 sm:max-w-sm sm:justify-self-start">
         <Label htmlFor="notes">Add a note</Label>
-        <Textarea name="notes" id="notes" />
+        <Textarea
+          name="notes"
+          id="notes"
+          value={notes}
+          onChange={(e) => setNotes(e.currentTarget.value)}
+        />
       </div>
 
       <div className="grid gap-4 sm:flex">
@@ -86,7 +109,9 @@ function ProductPage() {
           </Button>
         </div>
 
-        <Button className="sm:inline-block">Order now</Button>
+        <Button className="sm:inline-block" onClick={orderNow}>
+          Order now
+        </Button>
       </div>
     </div>
   );

@@ -13,7 +13,10 @@ const graph = i.graph(
       logoSrc: i.string(),
       name: i.string(),
     }),
-    orders: i.entity({}),
+    orders: i.entity({
+      notes: i.string(),
+      quantity: i.number(),
+    }),
     products: i.entity({
       description: i.string(),
       imageSrc: i.string(),
@@ -44,6 +47,18 @@ const graph = i.graph(
         on: "products",
         has: "one",
         label: "merchant",
+      },
+    },
+    ordersProducts: {
+      forward: {
+        on: "orders",
+        has: "one",
+        label: "product",
+      },
+      reverse: {
+        on: "products",
+        has: "many",
+        label: "orders",
       },
     },
   },
