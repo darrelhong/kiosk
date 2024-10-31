@@ -5,47 +5,48 @@ import { i } from "@instantdb/react";
 
 const graph = i.graph(
   {
-    "$users": i.entity({
-      "email": i.any().unique().indexed(),
+    $users: i.entity({
+      email: i.any().unique().indexed(),
     }),
-    "merchants": i.entity({
-      "category": i.any(),
-      "logoSrc": i.any(),
-      "name": i.any(),
+    merchants: i.entity({
+      category: i.string(),
+      logoSrc: i.string(),
+      name: i.string(),
     }),
-    "orders": i.entity({
-  
-    }),
-    "products": i.entity({
-  
+    orders: i.entity({}),
+    products: i.entity({
+      description: i.string(),
+      imageSrc: i.string(),
+      name: i.string(),
+      price: i.number(),
     }),
   },
   {
-    "merchants$user": {
-      "forward": {
-        "on": "merchants",
-        "has": "one",
-        "label": "$user"
+    merchants$user: {
+      forward: {
+        on: "merchants",
+        has: "one",
+        label: "$user",
       },
-      "reverse": {
-        "on": "$users",
-        "has": "one",
-        "label": "merchant"
-      }
+      reverse: {
+        on: "$users",
+        has: "one",
+        label: "merchant",
+      },
     },
-    "merchantsProducts": {
-      "forward": {
-        "on": "merchants",
-        "has": "many",
-        "label": "products"
+    merchantsProducts: {
+      forward: {
+        on: "merchants",
+        has: "many",
+        label: "products",
       },
-      "reverse": {
-        "on": "products",
-        "has": "one",
-        "label": "merchant"
-      }
-    }
-  }
+      reverse: {
+        on: "products",
+        has: "one",
+        label: "merchant",
+      },
+    },
+  },
 );
 
 export default graph;
