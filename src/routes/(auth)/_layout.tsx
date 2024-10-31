@@ -21,7 +21,9 @@ function PublicLayout() {
         </div>
       </header>
 
-      <Outlet />
+      <div className="container mx-auto px-4 pt-6">
+        <Outlet />
+      </div>
     </>
   );
 }
