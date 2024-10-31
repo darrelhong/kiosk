@@ -28,7 +28,11 @@ function Landing() {
             </p>
           ) : (
             data.merchants?.map((merchant) => (
-              <Link to="/shop/$merchantId" params={{ merchantId: merchant.id }}>
+              <Link
+                to="/shop/$merchantId"
+                params={{ merchantId: merchant.id }}
+                key={merchant.id}
+              >
                 <Card className="flex gap-x-4 p-5 hover:border-foreground">
                   <img
                     src={merchant.logoSrc}

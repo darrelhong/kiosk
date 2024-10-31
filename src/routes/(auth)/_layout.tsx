@@ -8,7 +8,7 @@ export const Route = createFileRoute("/(auth)/_layout")({
 function PublicLayout() {
   return (
     <>
-      <header className="sticky top-0 z-50 border-b backdrop-blur">
+      <header className="sticky top-0 z-50 border-b bg-background/60 backdrop-blur">
         <div className="container mx-auto flex min-h-14 items-center gap-x-4 px-4">
           <Link to="/" className="me-auto py-2 text-2xl font-bold sm:text-3xl">
             Kiosk App

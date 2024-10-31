@@ -1,5 +1,8 @@
+import { Card } from "@/components/ui/card";
+import { formatCents } from "@/lib/format-currency";
 import { db } from "@/lib/instant";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { tx } from "@instantdb/react";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { LoaderPinwheel } from "lucide-react";
 
 export const Route = createLazyFileRoute("/(auth)/_layout/shop/$merchantId")({
@@ -11,6 +14,7 @@ function MerchantPage() {
 
   const { data, isLoading, error } = db.useQuery({
     merchants: {
+      products: {},
       $: {
         where: {
           id: merchantId,
@@ -45,8 +49,36 @@ function MerchantPage() {
             </div>
           </div>
           <section>
-            <h3 className="mt-6 text-2xl font-semibold">Items</h3>
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+            <h3 className="mb-2 mt-6 text-2xl font-semibold">Items</h3>
+            <div className="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(384px,1fr))]">
+              {!data.merchants?.[0].products ? (
+                <p>No items found</p>
+              ) : (
+                data.merchants?.[0].products.map((product) => (
+                  <Link>
+                    <Card
+                      key={product.id}
+                      className="flex gap-3 p-4 hover:bg-accent"
+                    >
+                      <img
+                        src={product.imageSrc}
+                        alt={product.name}
+                        className="aspect-square size-24 rounded-xl object-cover"
+                      />
+                      <div>
+                        <h4 className="mb-0.5 text-lg">{product.name}</h4>
+                        <p className="line-clamp-3 text-sm text-muted-foreground">
+                          {product.description}
+                        </p>
+                        <p className="font-semibold">
+                          ${formatCents(product.price)}
+                        </p>
+                      </div>
+                    </Card>
+                  </Link>
+                ))
+              )}
+            </div>
           </section>
         </>
       )}
