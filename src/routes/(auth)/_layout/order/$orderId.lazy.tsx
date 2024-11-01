@@ -64,7 +64,7 @@ function OrderPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <div className="grid rounded-md border p-4">
+          <div className="grid rounded-md border bg-accent p-4">
             <div className="flex justify-between">
               <p>{order.product?.name}</p>
               <p>x {order.quantity}</p>
