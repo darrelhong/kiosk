@@ -36,6 +36,7 @@ function ProductPage() {
         .update({
           quantity,
           notes,
+          creationDateTime: new Date().toISOString(),
         })
         .link({
           product: productId,

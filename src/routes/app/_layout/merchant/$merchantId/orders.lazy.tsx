@@ -57,8 +57,10 @@ function MerchantOrders() {
           {data.orders.map((order) => (
             <Card className="w-full max-w-lg">
               <CardHeader>
-                <CardTitle>Order ID</CardTitle>
-                <CardDescription># {order.id}</CardDescription>
+                <CardTitle>Order: #{order.id}</CardTitle>
+                <CardDescription>
+                  {new Date(order.creationDateTime).toLocaleString()}
+                </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid rounded-md border bg-accent p-4">
@@ -70,12 +72,15 @@ function MerchantOrders() {
                     ${formatCents(order.product?.price || 0)}
                   </p>
                 </div>
-                <div>
-                  <p className="mb-1 text-sm font-medium">Notes:</p>
-                  <div className="rounded-md border p-2">
-                    <p>{order.notes}</p>
+
+                {order.notes && (
+                  <div>
+                    <p className="mb-1 text-sm font-medium">Notes:</p>
+                    <div className="rounded-md border p-2">
+                      <p>{order.notes}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </CardContent>
               <CardFooter className="justify-end gap-x-2.5 font-bold">
                 <p>Total:</p>

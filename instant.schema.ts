@@ -16,6 +16,7 @@ const graph = i.graph(
     orders: i.entity({
       notes: i.string(),
       quantity: i.number(),
+      creationDateTime: i.string(),
     }),
     products: i.entity({
       description: i.string(),
