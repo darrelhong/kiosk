@@ -1,8 +1,9 @@
+import { Button } from "@/components/ui/button";
 import { db } from "@/lib/instant";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { LoaderPinwheel } from "lucide-react";
 
-export const Route = createLazyFileRoute("/app/_layout/merchant/$merchantId")({
+export const Route = createLazyFileRoute("/app/_layout/merchant/$merchantId/")({
   component: MerchantHome,
 });
 
@@ -35,6 +36,11 @@ function MerchantHome() {
     <div className="grid gap-6">
       <h2 className="text-3xl font-semibold">{data.merchants[0].name}</h2>
       <h2 className="text-xl font-medium sm:text-2xl">At a glance</h2>
+      <div>
+        <Button asChild>
+          <Link to={`/app/merchant/${merchantId}/orders`}>Orders</Link>
+        </Button>
+      </div>
     </div>
   );
 }

@@ -22,9 +22,6 @@ const AppImport = createFileRoute('/app')()
 const authImport = createFileRoute('/(auth)')()
 const authLayoutIndexLazyImport = createFileRoute('/(auth)/_layout/')()
 const authLayoutLoginLazyImport = createFileRoute('/(auth)/_layout/login')()
-const AppLayoutMerchantMerchantIdLazyImport = createFileRoute(
-  '/app/_layout/merchant/$merchantId',
-)()
 const authLayoutShopMerchantIdLazyImport = createFileRoute(
   '/(auth)/_layout/shop/$merchantId',
 )()
@@ -33,6 +30,12 @@ const authLayoutProductProductIdLazyImport = createFileRoute(
 )()
 const authLayoutOrderOrderIdLazyImport = createFileRoute(
   '/(auth)/_layout/order/$orderId',
+)()
+const AppLayoutMerchantMerchantIdIndexLazyImport = createFileRoute(
+  '/app/_layout/merchant/$merchantId/',
+)()
+const AppLayoutMerchantMerchantIdOrdersLazyImport = createFileRoute(
+  '/app/_layout/merchant/$merchantId/orders',
 )()
 
 // Create/Update Routes
@@ -74,17 +77,6 @@ const authLayoutLoginLazyRoute = authLayoutLoginLazyImport
   } as any)
   .lazy(() => import('./routes/(auth)/_layout/login.lazy').then((d) => d.Route))
 
-const AppLayoutMerchantMerchantIdLazyRoute =
-  AppLayoutMerchantMerchantIdLazyImport.update({
-    id: '/merchant/$merchantId',
-    path: '/merchant/$merchantId',
-    getParentRoute: () => AppLayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/app/_layout/merchant/$merchantId.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
 const authLayoutShopMerchantIdLazyRoute = authLayoutShopMerchantIdLazyImport
   .update({
     id: '/shop/$merchantId',
@@ -117,6 +109,28 @@ const authLayoutOrderOrderIdLazyRoute = authLayoutOrderOrderIdLazyImport
   } as any)
   .lazy(() =>
     import('./routes/(auth)/_layout/order/$orderId.lazy').then((d) => d.Route),
+  )
+
+const AppLayoutMerchantMerchantIdIndexLazyRoute =
+  AppLayoutMerchantMerchantIdIndexLazyImport.update({
+    id: '/merchant/$merchantId/',
+    path: '/merchant/$merchantId/',
+    getParentRoute: () => AppLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/app/_layout/merchant/$merchantId/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const AppLayoutMerchantMerchantIdOrdersLazyRoute =
+  AppLayoutMerchantMerchantIdOrdersLazyImport.update({
+    id: '/merchant/$merchantId/orders',
+    path: '/merchant/$merchantId/orders',
+    getParentRoute: () => AppLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/app/_layout/merchant/$merchantId/orders.lazy').then(
+      (d) => d.Route,
+    ),
   )
 
 // Populate the FileRoutesByPath interface
@@ -186,11 +200,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLayoutShopMerchantIdLazyImport
       parentRoute: typeof authLayoutImport
     }
-    '/app/_layout/merchant/$merchantId': {
-      id: '/app/_layout/merchant/$merchantId'
+    '/app/_layout/merchant/$merchantId/orders': {
+      id: '/app/_layout/merchant/$merchantId/orders'
+      path: '/merchant/$merchantId/orders'
+      fullPath: '/app/merchant/$merchantId/orders'
+      preLoaderRoute: typeof AppLayoutMerchantMerchantIdOrdersLazyImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/app/_layout/merchant/$merchantId/': {
+      id: '/app/_layout/merchant/$merchantId/'
       path: '/merchant/$merchantId'
       fullPath: '/app/merchant/$merchantId'
-      preLoaderRoute: typeof AppLayoutMerchantMerchantIdLazyImport
+      preLoaderRoute: typeof AppLayoutMerchantMerchantIdIndexLazyImport
       parentRoute: typeof AppLayoutImport
     }
   }
@@ -229,11 +250,15 @@ const authRouteChildren: authRouteChildren = {
 const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
 
 interface AppLayoutRouteChildren {
-  AppLayoutMerchantMerchantIdLazyRoute: typeof AppLayoutMerchantMerchantIdLazyRoute
+  AppLayoutMerchantMerchantIdOrdersLazyRoute: typeof AppLayoutMerchantMerchantIdOrdersLazyRoute
+  AppLayoutMerchantMerchantIdIndexLazyRoute: typeof AppLayoutMerchantMerchantIdIndexLazyRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
-  AppLayoutMerchantMerchantIdLazyRoute: AppLayoutMerchantMerchantIdLazyRoute,
+  AppLayoutMerchantMerchantIdOrdersLazyRoute:
+    AppLayoutMerchantMerchantIdOrdersLazyRoute,
+  AppLayoutMerchantMerchantIdIndexLazyRoute:
+    AppLayoutMerchantMerchantIdIndexLazyRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
@@ -257,7 +282,8 @@ export interface FileRoutesByFullPath {
   '/order/$orderId': typeof authLayoutOrderOrderIdLazyRoute
   '/product/$productId': typeof authLayoutProductProductIdLazyRoute
   '/shop/$merchantId': typeof authLayoutShopMerchantIdLazyRoute
-  '/app/merchant/$merchantId': typeof AppLayoutMerchantMerchantIdLazyRoute
+  '/app/merchant/$merchantId/orders': typeof AppLayoutMerchantMerchantIdOrdersLazyRoute
+  '/app/merchant/$merchantId': typeof AppLayoutMerchantMerchantIdIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -267,7 +293,8 @@ export interface FileRoutesByTo {
   '/order/$orderId': typeof authLayoutOrderOrderIdLazyRoute
   '/product/$productId': typeof authLayoutProductProductIdLazyRoute
   '/shop/$merchantId': typeof authLayoutShopMerchantIdLazyRoute
-  '/app/merchant/$merchantId': typeof AppLayoutMerchantMerchantIdLazyRoute
+  '/app/merchant/$merchantId/orders': typeof AppLayoutMerchantMerchantIdOrdersLazyRoute
+  '/app/merchant/$merchantId': typeof AppLayoutMerchantMerchantIdIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -281,7 +308,8 @@ export interface FileRoutesById {
   '/(auth)/_layout/order/$orderId': typeof authLayoutOrderOrderIdLazyRoute
   '/(auth)/_layout/product/$productId': typeof authLayoutProductProductIdLazyRoute
   '/(auth)/_layout/shop/$merchantId': typeof authLayoutShopMerchantIdLazyRoute
-  '/app/_layout/merchant/$merchantId': typeof AppLayoutMerchantMerchantIdLazyRoute
+  '/app/_layout/merchant/$merchantId/orders': typeof AppLayoutMerchantMerchantIdOrdersLazyRoute
+  '/app/_layout/merchant/$merchantId/': typeof AppLayoutMerchantMerchantIdIndexLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -293,6 +321,7 @@ export interface FileRouteTypes {
     | '/order/$orderId'
     | '/product/$productId'
     | '/shop/$merchantId'
+    | '/app/merchant/$merchantId/orders'
     | '/app/merchant/$merchantId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -302,6 +331,7 @@ export interface FileRouteTypes {
     | '/order/$orderId'
     | '/product/$productId'
     | '/shop/$merchantId'
+    | '/app/merchant/$merchantId/orders'
     | '/app/merchant/$merchantId'
   id:
     | '__root__'
@@ -314,7 +344,8 @@ export interface FileRouteTypes {
     | '/(auth)/_layout/order/$orderId'
     | '/(auth)/_layout/product/$productId'
     | '/(auth)/_layout/shop/$merchantId'
-    | '/app/_layout/merchant/$merchantId'
+    | '/app/_layout/merchant/$merchantId/orders'
+    | '/app/_layout/merchant/$merchantId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -371,7 +402,8 @@ export const routeTree = rootRoute
       "filePath": "app/_layout.tsx",
       "parent": "/app",
       "children": [
-        "/app/_layout/merchant/$merchantId"
+        "/app/_layout/merchant/$merchantId/orders",
+        "/app/_layout/merchant/$merchantId/"
       ]
     },
     "/(auth)/_layout/login": {
@@ -394,8 +426,12 @@ export const routeTree = rootRoute
       "filePath": "(auth)/_layout/shop/$merchantId.lazy.tsx",
       "parent": "/(auth)/_layout"
     },
-    "/app/_layout/merchant/$merchantId": {
-      "filePath": "app/_layout/merchant/$merchantId.lazy.tsx",
+    "/app/_layout/merchant/$merchantId/orders": {
+      "filePath": "app/_layout/merchant/$merchantId/orders.lazy.tsx",
+      "parent": "/app/_layout"
+    },
+    "/app/_layout/merchant/$merchantId/": {
+      "filePath": "app/_layout/merchant/$merchantId/index.lazy.tsx",
       "parent": "/app/_layout"
     }
   }
