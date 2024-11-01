@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { formatCents } from "@/lib/format-currency";
 import { db } from "@/lib/instant";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
-import { LoaderPinwheel, PlusCircleIcon } from "lucide-react";
+import { LoaderPinwheel, PlusCircle } from "lucide-react";
 
 export const Route = createLazyFileRoute("/(auth)/_layout/shop/$merchantId")({
   component: MerchantPage,
@@ -61,7 +61,7 @@ function MerchantPage() {
               <Link to={`/product/${product.id}`}>
                 <Card
                   key={product.id}
-                  className="flex gap-3 p-4 hover:bg-accent"
+                  className="relative flex gap-3 p-4 hover:bg-accent"
                 >
                   <img
                     src={product.imageSrc}
@@ -79,10 +79,10 @@ function MerchantPage() {
                       <p className="font-semibold">
                         ${formatCents(product.price)}
                       </p>
-
-                      <PlusCircleIcon className="ms-auto mt-1 size-5" />
                     </div>
                   </div>
+
+                  <PlusCircle className="absolute bottom-4 end-4 size-5" />
                 </Card>
               </Link>
             ))
